@@ -1,15 +1,18 @@
 package assignment2;
 
+import utils.ToJsonString;
+
 public class User 
 {
-  public String userId;
+	
+  public Long   userId;
   public String firstName;
   public String surname;
-  public String age;
+  public int age;
   public String gender;
   public String occupation;
 
-  public User(String userId, String firstName, String surname, String age, String gender, String occupation)
+  public User(Long userId, String firstName, String surname, int age, String gender, String occupation)
   {
 	this.userId = userId;
 	this.firstName = firstName;
@@ -17,5 +20,10 @@ public class User
     this.age = age;
     this.gender = gender;
     this.occupation = occupation;
+  }
+  
+  public String toString()
+  {
+    return new ToJsonString(getClass(), this).toString();
   }
 }

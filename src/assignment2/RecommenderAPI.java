@@ -1,58 +1,62 @@
 package assignment2;
 
-import java.util.ArrayList;
-import java.util.List;
-import assignment2.User;
+import java.util.HashMap;
+import java.util.Map;
 
-public interface RecommenderAPI {
+import utils.Serializer;
+
+import java.util.Collection;
+
+public class RecommenderAPI {
+
+	private Map<Long,   User>   userIndex       = new HashMap<>();
+	private Serializer serializer;
 	
-	List <User> users = new ArrayList<User>();
+	  public RecommenderAPI()
+	  {}
+	
+	  public RecommenderAPI(Serializer serializer)
+	  {
+	    this.serializer = serializer;
+	  }
+	  
+	  @SuppressWarnings("unchecked")
+	  public void load() throws Exception
+	  {
+	    serializer.read();
+	    userIndex       = (Map<Long, User>)     serializer.pop();
+	  }
+	  
+	  public void store() throws Exception
+	  {
+	    serializer.push(userIndex);
+	    serializer.write(); 
+	  }
+	  
+	  public Collection<User> getUsers ()
+	  {
+	    return userIndex.values();
+	  }
+	  
+	  public  void deleteUsers() 
+	  {
+	    userIndex.clear();
+	  }
+	  
+	  public User createUser(Long userId, String firstName, String surname, int age, String gender, String occupation) 
+	  {
+	    User user = new User (userId, firstName, surname, age, gender, occupation);
+	    userIndex.put(user.userId, user);
+	    return user;
+	  }
 
-	public void addUser(firstName,lastName,age,gender,occupation)
-	{	
-	}
+	  public User getUserByUserId(Long userId) 
+	  {
+	    return userIndex.get(userId);
+	  }
 
-	public void removeUser(String userID)
-	{
-	}
-
-	public void addMovie(String title, int year, String url)
-	{
-	}
-
-	public void addRating(int userID, long movieID, double rating)
-	{
-
-	}
-
-	public void getMovie(String movieID)
-	{
-
-	}
-
-	public void getUserRatings(String userID)
-	{
-
-	}
-
-	public void getUserRecommendations(String userID)
-	{
-	}
-
-	public void getTopTenMovies()
-	{
-	}
-
-	public void load()
-	{
-	}
-
-	public void write()
-	{
-	}
-
-	public  void deleteUsers() 
-	{
-		users.clear();
-	}
+	  public void deleteUser(Long userId) 
+	  {
+	    User user = userIndex.remove(userId);
+	  }
 }

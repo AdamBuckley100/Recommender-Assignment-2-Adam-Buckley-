@@ -47,7 +47,7 @@ public class ParseTheData {
 						Integer.parseInt(userTokens[3])+",Gender:"+userTokens[4]+",Occupation:"+
 						userTokens[5]);
 				//added by me
-				users.add(new User(userTokens[0] , userTokens[1] , userTokens[2] , userTokens[3] , userTokens[4] , userTokens[5]));
+				users.add(new User(Long.valueOf(userTokens[0]) , userTokens[1] , userTokens[2] , Integer.parseInt(userTokens[3]) , userTokens[4] , userTokens[5]));
 				//added by me
 			    logger.log("Serializing contacts to XML");
 			    XStream xstream = new XStream(new DomDriver());
