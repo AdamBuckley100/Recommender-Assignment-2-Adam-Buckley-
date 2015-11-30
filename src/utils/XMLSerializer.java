@@ -1,5 +1,9 @@
 package utils;
 
+import models.Movie;
+import models.Rating;
+import models.User;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
