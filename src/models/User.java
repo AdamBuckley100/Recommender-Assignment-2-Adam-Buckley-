@@ -13,7 +13,7 @@ import utils.ToJsonString;
 
 public class User 
 {
-	static Long   counter = 0l;
+	public static Long   counter = 0l;
 
 	public Long   id;
 	public String firstName;
@@ -27,7 +27,15 @@ public class User
 
 	public User(String firstName, String lastName, String age, String gender, String occupation)
 	{
-		this.id = counter++;
+		this(counter++, firstName, lastName, age, gender, occupation);
+	}
+
+	public User(Long id, String firstName, String lastName, String age, String gender, String occupation)
+	{
+		this.id = id;
+		if (id >= counter) {
+			counter = id + 1;
+		}
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;

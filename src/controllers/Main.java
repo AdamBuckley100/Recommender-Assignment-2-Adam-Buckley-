@@ -1,7 +1,9 @@
 package controllers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import models.User;
 import utils.CSVLoader;
@@ -9,7 +11,6 @@ import utils.FileLogger;
 import utils.Serializer;
 import utils.FileLogger;
 import utils.ToJsonString;
-
 import models.User;
 import models.Movie;
 import models.Rating;
@@ -26,8 +27,8 @@ import models.Movie;
 import models.User;
 import models.Rating;
 import models.Movie;
-
 import controllers.Main;
+
 import java.io.File;
 import java.util.Collection;
 
@@ -61,6 +62,12 @@ public class Main
 		if (datastore.isFile())
 		{
 			likeMovies.load();
+			
+			likeMovies.getMaxUserId();
+			User.counter = (likeMovies.getMaxUserId())+1;
+			
+			likeMovies.getMaxMovieId();
+			Movie.counter = (likeMovies.getMaxMovieId())+1;
 		}
 		else
 		{
@@ -93,6 +100,20 @@ public class Main
 		System.out.println(movies);
 	}
 	
+	@Command(description="Get user by full name")
+	public void getUserByFullName (@Param(name="full name") String fullName)
+	{
+		User theUser = likeMovies.getUserByFullName(fullName);
+		System.out.println(theUser);
+	}
+	
+	@Command(description="Get movie by movie name")
+	public void getMovieByMovieName (@Param(name="movie name") String movieName)
+	{
+		Movie theMovie = likeMovies.getMovieByMovieName(movieName);
+		System.out.println(theMovie);
+	}
+	
 	@Command(description="Get all ratings details")
 	public void getRatings ()
 	{
@@ -115,9 +136,33 @@ public class Main
 	}
 
 	@Command(description="Delete a User")
-	public void removeUser (@Param(name="id") Long id)
+	public void removeUser (@Param(name="full Name") String fullName)
 	{
-			likeMovies.removeUser(id);
+		User theUser = likeMovies.getUserByFullName(fullName);
+		likeMovies.removeUser(theUser);
+	}
+	
+	@Command(description="Delete a Movie")
+	public void removeMovie (@Param(name="Movie name") String movieName)
+	{
+		Movie theMovie = likeMovies.getMovieByMovieName(movieName);
+		likeMovies.removeMovie(theMovie);
+	}
+	
+	@Command(description="Delete a Rating")
+	public void removeRating (@Param(name="User fullname") String fullName,
+			@Param(name="Movie Name") String movieName)
+	{
+		//User theUser = likeMovies.getUserByFullName(fullName);
+		//Movie theMovie = likeMovies.getMovieByMovieName(movieName);
+		
+		User user = likeMovies.getUserByFullName(fullName);
+		Movie movie = likeMovies.getMovieByMovieName(movieName);
+		//System.out.println(user);
+		//System.out.println(movie);
+		
+		Rating theRating = likeMovies.getRatingByUserIdAndMovieId(user.id, movie.id);
+		likeMovies.removeRating(theRating);
 	}
 
 	@Command(description="Add a movie")
@@ -139,17 +184,31 @@ public class Main
 	  } */
 
 	@Command(description="Add a rating to a movie")
-	public void addRating (@Param(name="User's fullname (no space between first & last name)") String fullName,
+	public void addRating (@Param(name="User's fullname") String fullName,
 			@Param(name="movie name")  String  movieName, 
 			@Param(name="rating") int rating)
 	{  
-		//method is returning null instead to user
-		User theUserObject = likeMovies.getUserByfullName(fullName);
-		Movie theMovieObject = likeMovies.getMovieByMovieName(movieName);
+		User user = likeMovies.getUserByFullName(fullName);
+		Movie movie = likeMovies.getMovieByMovieName(movieName);
 		
-		Long theIdOfTheUser = theUserObject.getUserId();
-		Long theIdOfTheMovie = theMovieObject.getMovieId();
+		Long theIdOfTheUser = user.getUserId();
+		Long theIdOfTheMovie = movie.getMovieId();
 		
+		//Rating theRating = likeMovies.getRatingByUserIdAndMovieId(user.id, movie.id);
 		likeMovies.addRating(theIdOfTheUser, theIdOfTheMovie, rating);
 	}
+	
+	@Command(description="Get top ten movies")
+	public void getTopTopMovies()
+	{
+		//temporary array list OF movies.
+		List<Movie> movies = new ArrayList<>();
+		
+	//	for (Movie: movie movies)
+		//{
+		//}
+		
+		//}
+	//}
+}
 }

@@ -21,8 +21,8 @@ public class Rating
 	public int rating;
 	
 	public List<Movie> movie = new ArrayList<>();
-
-	public Rating (Long movieId, Long userId, int rating)
+	
+	public Rating (Long userId, Long movieId, int rating)
 	{
 		this.userId = userId;
 		this.movieId  = movieId;

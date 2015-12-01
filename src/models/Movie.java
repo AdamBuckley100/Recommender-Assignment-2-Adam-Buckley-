@@ -21,10 +21,18 @@ public class Movie
 
 	public Movie(String title, String year, String url)
 	{
-		this.id = counter++;
+		this(counter++, title, year, url);
+	}
+	
+	public Movie(Long id, String title, String year, String url)
+	{
+		this.id = id;
+		if (id >= counter) {
+			counter = id + 1;
+		}
 		this.title = title;
 		this.year = year;
-		this.url  = url;
+		this.url = url;
 	}
 	
 	public Long getMovieId()

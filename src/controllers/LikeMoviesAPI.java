@@ -27,7 +27,6 @@ import models.Rating;
 
 public class LikeMoviesAPI
 {
-
 	private Serializer serializer;
 	
 	private Map<Long, User> userIndex = new HashMap<>();
@@ -62,13 +61,19 @@ public class LikeMoviesAPI
 		List <User> users = loader.loadUsers("moviedata_small/users5.dat");
 		for (User user : users)
 		{
-			userIndex.put(user.id,user);
+			//userIndex.put(user.id,user);
+			//addUser(user.id, user.firstName, user.lastName, user.age, user.gender, user.occupation);
+			userIndex.put(user.id, user);
+			fullNameIndex.put(user.firstName + " " + user.lastName, user);
 		}
 
 		List <Movie> movies = loader.loadMovies("moviedata_small/items5.dat");
 		for (Movie movie : movies)
 		{
-			movieIndex.put(movie.id,movie);
+			//movieIndex.put(movie.id,movie);
+			//addMovie(movie.title, movie.year, movie.url);
+			movieIndex.put(movie.id, movie);
+			movieNameIndex.put(movie.title, movie);
 		}
 		
 		List <Rating> ratings = loader.loadRatings("moviedata_small/ratings5.dat");
@@ -85,8 +90,8 @@ public class LikeMoviesAPI
 	{
 		serializer.read();
 		
-		movieNameIndex  = (Map<String, Movie>) serializer.pop();
 		ratingUserIdPlusMovieIdIndex = (Map<String, Rating>) serializer.pop();
+		movieNameIndex  = (Map<String, Movie>) serializer.pop();
 		movieIndex = (Map<Long, Movie>) serializer.pop();
 		fullNameIndex      = (Map<String, User>)   serializer.pop();
 		userIndex = (Map<Long, User>) serializer.pop();
@@ -122,12 +127,38 @@ public class LikeMoviesAPI
 		userIndex.clear();
 		fullNameIndex.clear();
 	}
-
-	public User addUser(String firstName, String surname, String age, String gender, String occupation) 
+	
+	public Long getMaxUserId()
 	{
-		User user = new User(firstName, surname, age, gender, occupation);
+    Long maxId = 0L;
+	for(Long id : userIndex.keySet())
+	{
+		if (id > maxId)
+		{
+			maxId = id;
+		}
+	}
+	return maxId;
+	}
+	
+	public Long getMaxMovieId()
+	{
+    Long maxId = 0L;
+	for(Long id : movieIndex.keySet())
+	{
+		if (id > maxId)
+		{
+			maxId = id;
+		}
+	}
+	return maxId;
+	}
+
+	public User addUser(String firstName, String lastName, String age, String gender, String occupation) 
+	{
+		User user = new User(firstName, lastName, age, gender, occupation);
 		userIndex.put(user.id, user);
-		fullNameIndex.put(firstName + surname, user);
+		fullNameIndex.put(firstName + " " + lastName, user);
 		//System.out.println(user.id);
 		return user;
 	}
@@ -136,7 +167,7 @@ public class LikeMoviesAPI
 	{
 		Movie movie = new Movie (title, year, url);
 		movieIndex.put(movie.id, movie);
-		//movieNameIndex.put(name, movie);
+		movieNameIndex.put(title, movie);
 		//System.out.println(movie.id);
 		return movie;
 	}
@@ -156,22 +187,47 @@ public class LikeMoviesAPI
 		return movieIndex.get(movieId);
 	}
 
-	public User getUserByfullName(String fullName) 
+	public User getUserByFullName(String fullName) 
 	{
+		//System.out.println(fullNameIndex.keySet());
 		return fullNameIndex.get(fullName);
 	}
 
-	public void removeUser(Long id) 
+	public void removeUser(User user) 
 	{
 		// below was previously userIndex.remove(userId);
-		userIndex.remove(id);
+		userIndex.remove(user.id);
+		fullNameIndex.remove(user.firstName + " " + user.lastName);
 		// above was previously: User user = userIndex.remove(userId);
 		//fullNameIndex.remove(user.fullName);
+	}
+	
+	public void removeMovie(Movie movie) 
+	{
+		// below was previously userIndex.remove(userId);
+		movieIndex.remove(movie.id);
+		movieNameIndex.remove(movie.title);
+		// above was previously: User user = userIndex.remove(userId);
+		//fullNameIndex.remove(user.fullName);
+	}
+	
+	public void removeRating(Rating rating)
+	{
+		//Rating theRating = getRatingByUserIdAndMovieId(userId + "," + movieId);
+		//ratingUserIdPlusMovieIdIndex.remove(theRating.userId + "," + theRating.movieId);
+		ratingUserIdPlusMovieIdIndex.remove(rating.userId.toString() + "," + rating.movieId.toString());
 	}
 
 	public User getUser(Long id) 
 	{
 		return userIndex.get(id);
+	}
+	
+	public Rating getRatingByUserIdAndMovieId(Long userId, long movieId) 
+	{
+		//String concatenatedId = userId + "," + movieId;
+		String concatId = userId + "," + movieId;
+		return ratingUserIdPlusMovieIdIndex.get(concatId);
 	}
 
 	public Rating addRating(Long userId, Long movieId, int rating)
@@ -183,8 +239,9 @@ public class LikeMoviesAPI
 		String concatenatedId = userId.toString() + "," + movieId.toString();
 		System.out.println(concatenatedId);
 		ratingUserIdPlusMovieIdIndex.put(concatenatedId, theRating);
+		System.out.println(userId);
 		User theUser = getUserByUserId(userId);
-		//**CHECK theUser.ratings.add(theRating);
+		theUser.ratings.add(theRating);
 		return theRating;
 	}
 
@@ -192,4 +249,16 @@ public class LikeMoviesAPI
 	{
 		return movieIndex.get(id);
 	}
+	
+	//public List<Movie> getTopTenMovies()
+	//{
+		//temporary array list OF movies.
+		//List<Movie> theTopTenMovies = new ArrayList<>();
+		
+		//for (Movie movie : movies)
+		//{
+			
+		//}
+		
+	//}
 }
