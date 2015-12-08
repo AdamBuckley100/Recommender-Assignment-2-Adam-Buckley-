@@ -20,7 +20,7 @@ public class Rating
 	public Long movieId;
 	public int rating;
 	
-	public List<Movie> movie = new ArrayList<>();
+	public List<Movie> movie = new ArrayList<Movie>();
 	
 	public Rating (Long userId, Long movieId, int rating)
 	{
@@ -29,10 +29,26 @@ public class Rating
 		this.rating  = rating;
 	}
 
+	//@Override
+	//public String toString()
+	//{
+	//	return new ToJsonString(getClass(), this).toString();
+	//}
+	
 	@Override
 	public String toString()
 	{
-		return new ToJsonString(getClass(), this).toString();
+		//return new ToJsonString(getClass(), this).toString();
+		
+		return "{\n "
+				
+				+ "\t rating: " + rating + "\n"
+				
+				+ "\t movie id: " + movieId + "\n"
+				
+				+ "\t user id: " + userId + "\n"
+				
+		+ "}\n";
 	}
 
 	@Override  

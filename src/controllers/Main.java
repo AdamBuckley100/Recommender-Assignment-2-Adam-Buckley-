@@ -149,6 +149,27 @@ public class Main
 		likeMovies.removeMovie(theMovie);
 	}
 	
+	@Command(description="Get top ten movies")
+	public void getTopTenMovies()
+	{
+		likeMovies.getTopTenMovies();
+		
+		System.out.println(likeMovies.getTopTenMovies());
+	}
+	
+	@Command(description="Get recommendations")
+	public void getRecommendation (@Param(name="User's Full Name") String fullName)
+	{
+		User theUser = likeMovies.getUserByFullName(fullName);
+		List<Movie> theMovies = likeMovies.getRecommendations(theUser);
+		
+		for (int i = 0; i < theMovies.size(); i++)
+		{
+			System.out.println("movie: " + theMovies.get(i).getMovieTitle());
+			//Movie movie = theMovies.get(i);
+		}
+	}
+	
 	@Command(description="Delete a Rating")
 	public void removeRating (@Param(name="User fullname") String fullName,
 			@Param(name="Movie Name") String movieName)
@@ -201,14 +222,6 @@ public class Main
 	@Command(description="Get top ten movies")
 	public void getTopTopMovies()
 	{
-		//temporary array list OF movies.
-		List<Movie> movies = new ArrayList<>();
-		
-	//	for (Movie: movie movies)
-		//{
-		//}
-		
-		//}
-	//}
-}
+		likeMovies.getTopTenMovies();
+	}
 }

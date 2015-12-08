@@ -23,7 +23,7 @@ public class User
 	public String occupation;
 	
 	//note this list below is a utils list not an awt array list or list
-	public List<Rating> ratings = new ArrayList<>();
+	public List<Rating> ratings = new ArrayList<Rating>();
 
 	public User(String firstName, String lastName, String age, String gender, String occupation)
 	{
@@ -48,9 +48,31 @@ public class User
 		return id;
 	}
 
+	//public String toString()
+	//{
+	//	return new ToJsonString(getClass(), this).toString();
+	//}
+	
+	@Override
 	public String toString()
 	{
-		return new ToJsonString(getClass(), this).toString();
+		//return new ToJsonString(getClass(), this).toString();
+		
+		return "{\n "
+				
+				+ "\t id: " + id + "\n"
+				
+				+ "\t first name: " + firstName + "\n"
+				
+				+ "\t last name: " + lastName + "\n"
+				
+				+ "\t age: " + age + "\n"
+				
+				+ "\t gender: " + gender + "\n"
+				
+				+ "\t occupation: " + occupation + "\n"
+
+		+ "}\n";
 	}
 
 	@Override  
