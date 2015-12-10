@@ -1,9 +1,5 @@
 package utils;
 
-import models.Movie;
-import models.Rating;
-import models.User;
-
 public interface Serializer
 {
 	void push(Object o);

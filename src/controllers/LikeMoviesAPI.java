@@ -1,54 +1,65 @@
 package controllers;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import utils.CSVLoader;
-import utils.FileLogger;
 import utils.Serializer;
-import utils.FileLogger;
-import utils.ToJsonString;
 
 import java.util.Collection;
 
-import com.google.common.base.Optional;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-
-import edu.princeton.cs.introcs.In;
 import models.User;
 import models.Movie;
 import models.Rating;
 
+/**
+ * This class is an API (java application program interface) class.
+ * This class performs the bulk of the actual actions that the options in the CLI
+ * from the main class say they will do (eg. get recommendations).
+ * 
+ * @author Adam Buckley (Student I.D: 20062910)
+ * @version 1
+ * @date 10/12/2015
+ */
+
 public class LikeMoviesAPI
 {
 	private Serializer serializer;
+	
+	/* There are five hash maps below. They are the following:
+	 * 1). a user id mapped to User object.
+	 * 
+	 * 2). a user id and a movie id combined (and separated by a single "," comma) 
+	 * mapped to a rating object. (note the two's ids will be in String form, not Long anymore).
+	 * 
+	 * 3). A movie id mapped to a Movie object.
+	 * 
+	 * 4). a user's full name (complete with a single space " " character between first and
+	 * last name) mapped to a User object.
+	 * 
+	 * 5). a movie name mapped to a Movie object. (that Movie object's name).
+	 */
 
 	public Map<Long, User> userIndex = new HashMap<>();
 
 	/* Note: The hash map directly below: the key is a concatenation of a the user's user I.D and
-	 * a Movie's movie I.D, (no spaces involved). This is done to ensure the the key is unique.
+	 * a Movie's movie I.D, (with a single "," comma character in between).
+	 * This is done to ensure the the key is unique.
 	 */
 	private Map<String, Rating> ratingUserIdPlusMovieIdIndex = new HashMap<>();
-
-	//created 02/12: 
-	//private Map<String, Rating> movieIdToRatingIndex = new HashMap<>();
 
 	private Map<Long, Movie> movieIndex = new HashMap<>();
 
 	/* Note: The hash map directly below: the key is a concatenation of a the user's first name and last name,
-	 * (no spaces involved). This is done to ensure the the key is unique.
+	 * (with a single space in between). This is done to ensure the the key is unique.
 	 */
 	private Map<String, User> fullNameIndex = new HashMap<>();
 
 	private Map<String, Movie> movieNameIndex = new HashMap<>();
-
 
 	public LikeMoviesAPI()
 	{}
@@ -62,29 +73,23 @@ public class LikeMoviesAPI
 	{
 		CSVLoader loader = new CSVLoader();
 
-		List <User> users = loader.loadUsers("data_movieLens/users.dat");
+		List <User> users = loader.loadUsers("moviedata_small/users5.dat");
 		for (User user : users)
 		{
-			//userIndex.put(user.id,user);
-			//addUser(user.id, user.firstName, user.lastName, user.age, user.gender, user.occupation);
 			userIndex.put(user.id, user);
 			fullNameIndex.put(user.firstName + " " + user.lastName, user);
 		}
 
-		List <Movie> movies = loader.loadMovies("data_movieLens/items.dat");
+		List <Movie> movies = loader.loadMovies("moviedata_small/items5.dat");
 		for (Movie movie : movies)
 		{
-			//movieIndex.put(movie.id,movie);
-			//addMovie(movie.title, movie.year, movie.url);
 			movieIndex.put(movie.id, movie);
 			movieNameIndex.put(movie.title, movie);
 		}
 
-		List <Rating> ratings = loader.loadRatings("data_movieLens/ratings.dat");
-		//System.out.println(ratings.size());
+		List <Rating> ratings = loader.loadRatings("moviedata_small/ratings5.dat");
 		for (Rating rating : ratings)
 		{
-			//ratingUserIdPlusMovieIdIndex.put(rating.userId+rating.movieId,rating);
 			addRating(rating.userId,rating.movieId,rating.rating);
 		}
 	}
@@ -181,7 +186,6 @@ public class LikeMoviesAPI
 		Movie movie = new Movie (id, title, year, url);
 		movieIndex.put(movie.id, movie);
 		movieNameIndex.put(title, movie);
-		//System.out.println(movie.id);
 		return movie;
 	}
 
@@ -191,7 +195,6 @@ public class LikeMoviesAPI
 		Movie movie = new Movie (title, year, url);
 		movieIndex.put(movie.id, movie);
 		movieNameIndex.put(title, movie);
-		//System.out.println(movie.id);
 		return movie;
 	}
 
@@ -212,32 +215,23 @@ public class LikeMoviesAPI
 
 	public User getUserByFullName(String fullName) 
 	{
-		//System.out.println(fullNameIndex.keySet());
 		return fullNameIndex.get(fullName);
 	}
 
 	public void removeUser(User user) 
 	{
-		// below was previously userIndex.remove(userId);
 		userIndex.remove(user.id);
 		fullNameIndex.remove(user.firstName + " " + user.lastName);
-		// above was previously: User user = userIndex.remove(userId);
-		//fullNameIndex.remove(user.fullName);
 	}
 
 	public void removeMovie(Movie movie) 
 	{
-		// below was previously userIndex.remove(userId);
 		movieIndex.remove(movie.id);
 		movieNameIndex.remove(movie.title);
-		// above was previously: User user = userIndex.remove(userId);
-		//fullNameIndex.remove(user.fullName);
 	}
 
 	public void removeRating(Rating rating)
 	{
-		//Rating theRating = getRatingByUserIdAndMovieId(userId + "," + movieId);
-		//ratingUserIdPlusMovieIdIndex.remove(theRating.userId + "," + theRating.movieId);
 		ratingUserIdPlusMovieIdIndex.remove(rating.userId.toString() + "," + rating.movieId.toString());
 
 		User theUser = getUserByUserId(rating.userId);
@@ -245,18 +239,12 @@ public class LikeMoviesAPI
 
 		Movie theMovie = getMovieByMovieId(rating.movieId);
 		theMovie.ratings.remove(rating);
-
-		//added 2/12 removing the rating from the movie id to rating object hashmap too!
-	}
-
-	public User getUser(Long id) 
-	{
-		return userIndex.get(id);
 	}
 
 	public Rating getRatingByUserIdAndMovieId(Long userId, Long movieId) 
 	{
 		//String concatenatedId = userId + "," + movieId;
+		//concatId means concatenated Id.
 		String concatId = userId + "," + movieId;
 		return ratingUserIdPlusMovieIdIndex.get(concatId);
 	}
@@ -268,24 +256,14 @@ public class LikeMoviesAPI
 		//concatenated Id is the user id and the movie id concatenated together (no space involved).
 
 		String concatenatedId = userId.toString() + "," + movieId.toString();
-		//System.out.println(concatenatedId);
+
 		ratingUserIdPlusMovieIdIndex.put(concatenatedId, theRating);
 
-		//added 2/12: putting to the hashmap where a movie id is mapped to a rating object.
-		String movieIdInString = movieId.toString();
-		//movieIdToRatingIndex.put(movieIdInString, theRating);
-
-		//System.out.println(userId);
 		User theUser = getUserByUserId(userId);
 		Movie theMovie = getMovieByMovieId(movieId);
-		//System.out.println("User start: " + theUser + "User End");
-		//System.out.println("Rating start: " + theRating + "rating end");
+
 		theUser.ratings.add(theRating);
-		//System.out.println(theUser.ratings);
-		//System.out.println(theMovie);
-		//System.out.println(theMovie.ratings);
-		//System.out.println("Movie start: " + theMovie + " movie end.");
-		//System.out.println("rating startt: " + theRating + "rating end.");
+
 		theMovie.ratings.add(theRating);
 		return theRating;
 	}
@@ -297,11 +275,6 @@ public class LikeMoviesAPI
 
 	public List<Movie> getTopTenMovies()
 	{
-		//List<Movie> theTopTenMovies = (List<Movie>) movieNameIndex.values();
-		//List<Movie> allMovies = (List<Movie>) movieNameIndex.values();
-		//private Map<String, Rating> ratingUserIdPlusMovieIdIndex = new HashMap<>();
-		//List<Rating> allRating = (List<Rating>) movieIdToRatingIndex.values();
-
 		Collection<Movie> allMovies = getMovies();
 
 		List<Movie> moviesList = new ArrayList<Movie>(allMovies);
@@ -311,15 +284,13 @@ public class LikeMoviesAPI
 
 		Collections.reverse(moviesList);
 
-		List<Movie> subItems = moviesList.subList(0,10);
+		List<Movie> subItems = moviesList.subList(0, 10 > moviesList.size() ? moviesList.size() : 10);
 
 		return subItems;
 	}
 
 	public List<Movie> getRecommendations(User user)
 	{
-		//User theUser = getUserByFullName(fullName);
-		//Long theUserId = theUser.id;
 		//temporary array list of all movies the user has NOT rated
 		ArrayList<Movie> moviesRated = new ArrayList<Movie>();
 		Long theUserId = user.id;
@@ -335,9 +306,9 @@ public class LikeMoviesAPI
 				}
 			}
 		}
-		
+
 		ArrayList<Movie> moviesNotRated = new ArrayList<Movie>();
-		
+
 		for (Movie movie : movieIndex.values())
 		{
 			if (!moviesRated.contains(movie))
@@ -346,24 +317,11 @@ public class LikeMoviesAPI
 			}	
 		}
 
-		//now sort by ratings (just in case its not already sorted?).
 		//sort is a modified version of merge sort.
 		Collections.sort(moviesNotRated);
 		Collections.reverse(moviesNotRated);
 		List<Movie> movies = moviesNotRated.subList(0, 6 > moviesNotRated.size() ? moviesNotRated.size() : 6);
 
 		return movies;
-		//List<Movie> theMoviesRated = new ArrayList<Movie>();
-
-		//for (Movie movie : theMoviesRated)
-		//{
-		//	theMoviesRated.add(movie);
-		//}
-
-		//for (int i = 0; i < movies.size(); i++)
-		//{
-		//	System.out.println("movie: " + movies.get(i).getMovieTitle());
-		//Movie movie = movies.get(i);
-		//}
 	}
 }

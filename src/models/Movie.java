@@ -1,11 +1,7 @@
 package models;
 
-import static com.google.common.base.MoreObjects.toStringHelper;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import utils.ToJsonString;
 
 import com.google.common.base.Objects;
 
@@ -43,7 +39,7 @@ public class Movie implements Comparable<Movie>
 	{
 		return id;
 	}
-	
+
 	public String getMovieTitle()
 	{
 		return title;
@@ -73,17 +69,17 @@ public class Movie implements Comparable<Movie>
 	public String toString()
 	{
 		//return new ToJsonString(getClass(), this).toString();
-		
+
 		return "{\n "
-				
+
 				+ "\t id: " + id + "\n"
-				
+
 				+ "\t title: " + title + "\n"
-				
+
 				+ "\t year: " + year + "\n"
-				
+
 				+ "\t url: " + url + "\n"
-				
+
 				+ "\t average rating of the " + title + " movie: "+ getAverageRating() + "\n"
 
 		+ "}\n";
@@ -112,7 +108,8 @@ public class Movie implements Comparable<Movie>
 	}
 
 	@Override
-	public int compareTo(Movie theOtherMovie) {
+	public int compareTo(Movie theOtherMovie)
+	{
 		return Double.compare(this.getAverageRating(), theOtherMovie.getAverageRating());
 	}
 }

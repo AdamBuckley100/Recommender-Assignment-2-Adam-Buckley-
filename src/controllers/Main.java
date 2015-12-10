@@ -1,57 +1,39 @@
 package controllers;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import models.User;
-import utils.CSVLoader;
-import utils.FileLogger;
 import utils.Serializer;
-import utils.FileLogger;
-import utils.ToJsonString;
-import models.User;
 import models.Movie;
 import models.Rating;
 
-import com.google.common.base.Optional;
-
-import utils.Serializer;
 import utils.XMLSerializer;
 import asg.cliche.Command;
 import asg.cliche.Param;
 import asg.cliche.Shell;
 import asg.cliche.ShellFactory;
-import models.Movie;
-import models.User;
-import models.Rating;
-import models.Movie;
 import controllers.Main;
 
-import java.io.File;
-import java.util.Collection;
-
-import com.google.common.base.Optional;
-
-import utils.Serializer;
-import utils.XMLSerializer;
-import asg.cliche.Command;
-import asg.cliche.Param;
-import asg.cliche.Shell;
-import asg.cliche.ShellFactory;
-import models.Movie;
-import models.User;
+/**
+ * 
+ * This class provides the user with a command line interface
+ * (using Cliche Command-Line Shell). This is the class that allows the
+ * user to choose (through the CLI) among several options that act on
+ * the hash maps that exist in the LikeMoviesAPI class and return to the user
+ * different lists depending on what the user wants (eg. get recommendations
+ * returns to the user a printed out List of the top 5 movies that they would
+ * most likely want to see.
+ *
+ * @author Adam Buckley (Student I.D: 20062910)
+ * @version 1
+ * @date 10/12/2015
+ */
 
 public class Main
 {
 	public LikeMoviesAPI likeMovies;
-	
-	@Command(description="prime")
-	public void prime () throws Exception
-	{
-		likeMovies.prime();
-	}
 
 	public Main() throws Exception
 	{
@@ -62,11 +44,9 @@ public class Main
 		if (datastore.isFile())
 		{
 			likeMovies.load();
-			
-			likeMovies.getMaxUserId();
+
 			User.counter = (likeMovies.getMaxUserId())+1;
-			
-			likeMovies.getMaxMovieId();
+
 			Movie.counter = (likeMovies.getMaxMovieId())+1;
 		}
 		else
@@ -77,10 +57,9 @@ public class Main
 
 	public static void main(String[] args) throws Exception
 	{
-		
 		Main main = new Main();
 
-		Shell shell = ShellFactory.createConsoleShell("pm", "Welcome to pacemaker-console - ?help for instructions", main);
+		Shell shell = ShellFactory.createConsoleShell("pm", "Welcome to Recommender-console - ?help for instructions", main);
 		shell.commandLoop();
 
 		main.likeMovies.store();
@@ -92,28 +71,28 @@ public class Main
 		Collection<User> users = likeMovies.getUsers();
 		System.out.println(users);
 	}
-	
+
 	@Command(description="Get all movies details")
 	public void getMovies ()
 	{
 		Collection<Movie> movies = likeMovies.getMovies();
 		System.out.println(movies);
 	}
-	
+
 	@Command(description="Get user by full name")
 	public void getUserByFullName (@Param(name="full name") String fullName)
 	{
 		User theUser = likeMovies.getUserByFullName(fullName);
 		System.out.println(theUser);
 	}
-	
+
 	@Command(description="Get movie by movie name")
 	public void getMovieByMovieName (@Param(name="movie name") String movieName)
 	{
 		Movie theMovie = likeMovies.getMovieByMovieName(movieName);
 		System.out.println(theMovie);
 	}
-	
+
 	@Command(description="Get all ratings details")
 	public void getRatings ()
 	{
@@ -141,47 +120,34 @@ public class Main
 		User theUser = likeMovies.getUserByFullName(fullName);
 		likeMovies.removeUser(theUser);
 	}
-	
+
 	@Command(description="Delete a Movie")
 	public void removeMovie (@Param(name="Movie name") String movieName)
 	{
 		Movie theMovie = likeMovies.getMovieByMovieName(movieName);
 		likeMovies.removeMovie(theMovie);
 	}
-	
-	@Command(description="Get top ten movies")
-	public void getTopTenMovies()
-	{
-		likeMovies.getTopTenMovies();
-		
-		System.out.println(likeMovies.getTopTenMovies());
-	}
-	
+
 	@Command(description="Get recommendations")
 	public void getRecommendation (@Param(name="User's Full Name") String fullName)
 	{
 		User theUser = likeMovies.getUserByFullName(fullName);
 		List<Movie> theMovies = likeMovies.getRecommendations(theUser);
-		
+
 		for (int i = 0; i < theMovies.size(); i++)
 		{
 			System.out.println("movie: " + theMovies.get(i).getMovieTitle());
-			//Movie movie = theMovies.get(i);
 		}
 	}
-	
+
 	@Command(description="Delete a Rating")
 	public void removeRating (@Param(name="User fullname") String fullName,
 			@Param(name="Movie Name") String movieName)
 	{
-		//User theUser = likeMovies.getUserByFullName(fullName);
-		//Movie theMovie = likeMovies.getMovieByMovieName(movieName);
-		
+
 		User user = likeMovies.getUserByFullName(fullName);
 		Movie movie = likeMovies.getMovieByMovieName(movieName);
-		//System.out.println(user);
-		//System.out.println(movie);
-		
+
 		Rating theRating = likeMovies.getRatingByUserIdAndMovieId(user.id, movie.id);
 		likeMovies.removeRating(theRating);
 	}
@@ -192,17 +158,6 @@ public class Main
 	{
 		likeMovies.addMovie(title, year, url);
 	}
-	
-	 /* @Command(description="Add Rating to an Movie")
-	  public void addRating (@Param(name="User-id")  Long  userId,   
-	                           @Param(name="movie-id") Long movieId, @Param(name="rating") int rating)
-	  {
-	    Optional<Movie> movie = Optional.fromNullable(likeMovies.getMovie(movieId));
-	    if (movie.isPresent())
-	    {
-	      likeMovies.addRating(userId, movieId, rating);
-	    }
-	  } */
 
 	@Command(description="Add a rating to a movie")
 	public void addRating (@Param(name="User's fullname") String fullName,
@@ -211,17 +166,18 @@ public class Main
 	{  
 		User user = likeMovies.getUserByFullName(fullName);
 		Movie movie = likeMovies.getMovieByMovieName(movieName);
-		
+
 		Long theIdOfTheUser = user.getUserId();
 		Long theIdOfTheMovie = movie.getMovieId();
-		
-		//Rating theRating = likeMovies.getRatingByUserIdAndMovieId(user.id, movie.id);
+
 		likeMovies.addRating(theIdOfTheUser, theIdOfTheMovie, rating);
 	}
-	
+
 	@Command(description="Get top ten movies")
-	public void getTopTopMovies()
+	public void getTopTenMovies()
 	{
 		likeMovies.getTopTenMovies();
+		
+		System.out.println(likeMovies.getTopTenMovies());
 	}
 }

@@ -1,15 +1,9 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import controllers.LikeMoviesAPI;
 
 import com.google.common.base.Objects;
-
-import utils.ToJsonString;
 
 public class User 
 {
@@ -21,7 +15,7 @@ public class User
 	public String age;
 	public String gender;
 	public String occupation;
-	
+
 	//note this list below is a utils list not an awt array list or list
 	public List<Rating> ratings = new ArrayList<Rating>();
 
@@ -42,7 +36,7 @@ public class User
 		this.gender = gender;
 		this.occupation = occupation;
 	}
-	
+
 	public Long getUserId()
 	{
 		return id;
@@ -52,24 +46,24 @@ public class User
 	//{
 	//	return new ToJsonString(getClass(), this).toString();
 	//}
-	
+
 	@Override
 	public String toString()
 	{
 		//return new ToJsonString(getClass(), this).toString();
-		
+
 		return "{\n "
-				
+
 				+ "\t id: " + id + "\n"
-				
+
 				+ "\t first name: " + firstName + "\n"
-				
+
 				+ "\t last name: " + lastName + "\n"
-				
+
 				+ "\t age: " + age + "\n"
-				
+
 				+ "\t gender: " + gender + "\n"
-				
+
 				+ "\t occupation: " + occupation + "\n"
 
 		+ "}\n";

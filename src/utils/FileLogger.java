@@ -1,9 +1,5 @@
 package utils;
 
-import models.Movie;
-import models.Rating;
-import models.User;
-
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;

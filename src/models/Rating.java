@@ -2,14 +2,8 @@ package models;
 
 import com.google.common.base.Objects;
 
-import utils.ToJsonString;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.base.Objects;
-
-import utils.ToJsonString;
 
 public class Rating
 {
@@ -19,9 +13,9 @@ public class Rating
 	public Long userId;
 	public Long movieId;
 	public int rating;
-	
+
 	public List<Movie> movie = new ArrayList<Movie>();
-	
+
 	public Rating (Long userId, Long movieId, int rating)
 	{
 		this.userId = userId;
@@ -34,27 +28,27 @@ public class Rating
 	//{
 	//	return new ToJsonString(getClass(), this).toString();
 	//}
-	
+
 	@Override
 	public String toString()
 	{
 		//return new ToJsonString(getClass(), this).toString();
-		
+
 		return "{\n "
-				
+
 				+ "\t rating: " + rating + "\n"
-				
+
 				+ "\t movie id: " + movieId + "\n"
-				
+
 				+ "\t user id: " + userId + "\n"
-				
+
 		+ "}\n";
 	}
 
 	@Override  
 	public int hashCode()  
 	{  
-		
+
 		return Objects.hashCode(this.userId, this.movieId, this.rating);  
 	} 
 
