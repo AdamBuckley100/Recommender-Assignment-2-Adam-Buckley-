@@ -5,11 +5,19 @@ import com.google.common.base.Objects;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This Rating class is a class that is representative of what a rating object will
+ * possess upon creation (ie. the rating object of type Rating will have the
+ * fields userId, movieId and rating. The rating field is the rating itself: a number
+ * between -5 and 5 (all inclusive).
+ * 
+ * @author Adam Buckley (Student I.D: 20062910).
+ * @version 1.
+ * @date 10/12/2015.
+ */
+
 public class Rating
 {
-	//rating doesn't need a an id: why would it?
-	//static Long   counter = 0l;
-
 	public Long userId;
 	public Long movieId;
 	public int rating;
@@ -23,17 +31,13 @@ public class Rating
 		this.rating  = rating;
 	}
 
-	//@Override
-	//public String toString()
-	//{
-	//	return new ToJsonString(getClass(), this).toString();
-	//}
-
+	/**
+	 * This method just returns a String representation of an object, namely
+	 * the movie object of type Rating in this case
+	 */
 	@Override
 	public String toString()
 	{
-		//return new ToJsonString(getClass(), this).toString();
-
 		return "{\n "
 
 				+ "\t rating: " + rating + "\n"
@@ -45,6 +49,9 @@ public class Rating
 		+ "}\n";
 	}
 
+	/**
+	 * this method provides the hash code of an object - namely a Rating object in this case.
+	 */
 	@Override  
 	public int hashCode()  
 	{  
@@ -52,6 +59,13 @@ public class Rating
 		return Objects.hashCode(this.userId, this.movieId, this.rating);  
 	} 
 
+	/**
+	 * The equals() method compares two objects for equality and returns true
+	 * if they are equal.
+	 * 
+	 * @return - true or false (boolean).
+	 * 
+	 */
 	@Override
 	public boolean equals(final Object obj)
 	{

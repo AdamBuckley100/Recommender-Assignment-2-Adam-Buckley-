@@ -21,16 +21,16 @@ import models.Rating;
  * This class performs the bulk of the actual actions that the options in the CLI
  * from the main class say they will do (eg. get recommendations).
  * 
- * @author Adam Buckley (Student I.D: 20062910)
- * @version 1
- * @date 10/12/2015
+ * @author Adam Buckley (Student I.D: 20062910).
+ * @version 1.
+ * @date 10/12/2015.
  */
 
 public class LikeMoviesAPI
 {
 	private Serializer serializer;
 	
-	/* There are five hash maps below. They are the following:
+	/** There are five hash maps below. They are the following:
 	 * 1). a user id mapped to User object.
 	 * 
 	 * 2). a user id and a movie id combined (and separated by a single "," comma) 
@@ -46,7 +46,7 @@ public class LikeMoviesAPI
 
 	public Map<Long, User> userIndex = new HashMap<>();
 
-	/* Note: The hash map directly below: the key is a concatenation of a the user's user I.D and
+	/** Note: The hash map directly below: the key is a concatenation of a the user's user I.D and
 	 * a Movie's movie I.D, (with a single "," comma character in between).
 	 * This is done to ensure the the key is unique.
 	 */
@@ -54,7 +54,7 @@ public class LikeMoviesAPI
 
 	private Map<Long, Movie> movieIndex = new HashMap<>();
 
-	/* Note: The hash map directly below: the key is a concatenation of a the user's first name and last name,
+	/** Note: The hash map directly below: the key is a concatenation of a the user's first name and last name,
 	 * (with a single space in between). This is done to ensure the the key is unique.
 	 */
 	private Map<String, User> fullNameIndex = new HashMap<>();
@@ -69,10 +69,21 @@ public class LikeMoviesAPI
 		this.serializer = serializer;
 	}
 
+	/**
+	 * The prime method is a method that takes the parsed in data from the CSVLoader
+	 * class and populates the hash maps that have that object type as a value (right
+	 * side of the hashmap, not key). This is done for user, movie and rating parsed in
+	 * objects.
+	 */
 	public void prime() throws Exception
 	{
 		CSVLoader loader = new CSVLoader();
 
+		/**
+		 * Please note: in the following method, simply change what is in the
+		 * quotes to "data_movieLens/users.dat" to parse in the large data set instead,
+		 * and similar changes for the two methods below. 
+		 */
 		List <User> users = loader.loadUsers("moviedata_small/users5.dat");
 		for (User user : users)
 		{
@@ -137,6 +148,12 @@ public class LikeMoviesAPI
 		fullNameIndex.clear();
 	}
 
+	/**
+	 * This method finds the largest number user I.D of all the users
+	 * that are currently in the userIndex hashmap and returns it.
+	 * 
+	 * @return Long - largest number user id found of users in the userIndex hashmap.
+	 */
 	public Long getMaxUserId()
 	{
 		Long maxId = 0L;
@@ -150,6 +167,12 @@ public class LikeMoviesAPI
 		return maxId;
 	}
 
+	/**
+	 * This method finds the largest number movie I.D of all the movies
+	 * that are currently in the movieIndex hashmap and returns it.
+	 * 
+	 * @return Long - largest number movie id found of movies in the userIndex hashmap.
+	 */
 	public Long getMaxMovieId()
 	{
 		Long maxId = 0L;
@@ -168,7 +191,6 @@ public class LikeMoviesAPI
 		User user = new User(id, firstName, lastName, age, gender, occupation);
 		userIndex.put(user.id, user);
 		fullNameIndex.put(firstName + " " + lastName, user);
-		//System.out.println(user.id);
 		return user;
 	}
 
@@ -177,7 +199,6 @@ public class LikeMoviesAPI
 		User user = new User(firstName, lastName, age, gender, occupation);
 		userIndex.put(user.id, user);
 		fullNameIndex.put(firstName + " " + lastName, user);
-		//System.out.println(user.id);
 		return user;
 	}
 
@@ -243,8 +264,8 @@ public class LikeMoviesAPI
 
 	public Rating getRatingByUserIdAndMovieId(Long userId, Long movieId) 
 	{
-		//String concatenatedId = userId + "," + movieId;
-		//concatId means concatenated Id.
+		// concatId means concatenated Id. userId and MovieId and concatenated together
+		// but a "," comma goes in between them
 		String concatId = userId + "," + movieId;
 		return ratingUserIdPlusMovieIdIndex.get(concatId);
 	}
@@ -253,8 +274,9 @@ public class LikeMoviesAPI
 	{
 		Rating theRating = new Rating (userId, movieId, rating);
 
-		//concatenated Id is the user id and the movie id concatenated together (no space involved).
-
+		// concatenatedId is the user id and the movie id concatenated together,
+		// with a "," comma in between them.
+		
 		String concatenatedId = userId.toString() + "," + movieId.toString();
 
 		ratingUserIdPlusMovieIdIndex.put(concatenatedId, theRating);
@@ -279,11 +301,14 @@ public class LikeMoviesAPI
 
 		List<Movie> moviesList = new ArrayList<Movie>(allMovies);
 
-		//modified merge sort
+		// the sort which is implemented below is a modified merge sort.
 		Collections.sort(moviesList);
 
 		Collections.reverse(moviesList);
 
+		// a sublist List called subItems is created where it will be populated with 10 movies
+		// (0 is inclusive but 10 is exclusive - so it's movies 0 to 9 (inclusive) from the
+		// moviesList array List).
 		List<Movie> subItems = moviesList.subList(0, 10 > moviesList.size() ? moviesList.size() : 10);
 
 		return subItems;
@@ -291,8 +316,9 @@ public class LikeMoviesAPI
 
 	public List<Movie> getRecommendations(User user)
 	{
-		//temporary array list of all movies the user has NOT rated
+		//temporary array list of all movies the user has rated.
 		ArrayList<Movie> moviesRated = new ArrayList<Movie>();
+		
 		Long theUserId = user.id;
 
 		for (Rating rating : ratingUserIdPlusMovieIdIndex.values())
@@ -319,8 +345,14 @@ public class LikeMoviesAPI
 
 		//sort is a modified version of merge sort.
 		Collections.sort(moviesNotRated);
+		
+		//the moviesNotRated array list is reversed (starting with highest rated movie first).
 		Collections.reverse(moviesNotRated);
-		List<Movie> movies = moviesNotRated.subList(0, 6 > moviesNotRated.size() ? moviesNotRated.size() : 6);
+		
+		// a sublist List called movies is created where it will be populated with 5 movies
+		// (0 is inclusive but 5 is exclusive - so it's movies 0, 1, 2 ,3 and 4 from the
+		// moviesNotRated array List).
+		List<Movie> movies = moviesNotRated.subList(0, 5 > moviesNotRated.size() ? moviesNotRated.size() : 5);
 
 		return movies;
 	}

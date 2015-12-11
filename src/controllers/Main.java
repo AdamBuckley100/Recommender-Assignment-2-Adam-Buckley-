@@ -17,7 +17,6 @@ import asg.cliche.ShellFactory;
 import controllers.Main;
 
 /**
- * 
  * This class provides the user with a command line interface
  * (using Cliche Command-Line Shell). This is the class that allows the
  * user to choose (through the CLI) among several options that act on
@@ -25,10 +24,13 @@ import controllers.Main;
  * different lists depending on what the user wants (eg. get recommendations
  * returns to the user a printed out List of the top 5 movies that they would
  * most likely want to see.
+ * 
+ * In addition to this, the options to alter the hash maps from the likeMoviesAPI class
+ * also exists (eg. delete user).
  *
- * @author Adam Buckley (Student I.D: 20062910)
- * @version 1
- * @date 10/12/2015
+ * @author Adam Buckley (Student I.D: 20062910).
+ * @version 1.
+ * @date 10/12/2015.
  */
 
 public class Main
@@ -45,8 +47,14 @@ public class Main
 		{
 			likeMovies.load();
 
+			// sets the User counter to: 1 added to the highest counter of all the 
+			// user objects of type User that were loaded in from the serializer.
+			// Note the counter is shared among users.
 			User.counter = (likeMovies.getMaxUserId())+1;
 
+			// sets the Movie counter to: 1 added to the highest counter of all the 
+			// movie objects of type Movie that were loaded in from the serializer.
+			// Note the counter is shared among movies.
 			Movie.counter = (likeMovies.getMaxMovieId())+1;
 		}
 		else
@@ -59,7 +67,8 @@ public class Main
 	{
 		Main main = new Main();
 
-		Shell shell = ShellFactory.createConsoleShell("pm", "Welcome to Recommender-console - ?help for instructions", main);
+		Shell shell = ShellFactory.createConsoleShell("", "Welcome to the Like-Movies console - Type: ?help for instructions"
+				+ " or ?List-all for all options", main);
 		shell.commandLoop();
 
 		main.likeMovies.store();
