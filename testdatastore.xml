@@ -1,0 +1,254 @@
+<object-stream>
+  <java.util.Stack serialization="custom">
+    <unserializable-parents/>
+    <vector>
+      <default>
+        <capacityIncrement>0</capacityIncrement>
+        <elementCount>5</elementCount>
+        <elementData>
+          <map>
+            <entry>
+              <long>0</long>
+              <models.User>
+                <id>0</id>
+                <firstName>marge</firstName>
+                <lastName>simpson</lastName>
+                <age>18</age>
+                <gender>F</gender>
+                <occupation>driver</occupation>
+                <ratings>
+                  <models.Rating>
+                    <userId>0</userId>
+                    <movieId>0</movieId>
+                    <rating>-2</rating>
+                    <movie/>
+                  </models.Rating>
+                </ratings>
+              </models.User>
+            </entry>
+            <entry>
+              <long>1</long>
+              <models.User>
+                <id>1</id>
+                <firstName>lisa</firstName>
+                <lastName>simpson</lastName>
+                <age>56</age>
+                <gender>F</gender>
+                <occupation>teacher</occupation>
+                <ratings>
+                  <models.Rating>
+                    <userId>1</userId>
+                    <movieId>1</movieId>
+                    <rating>-2</rating>
+                    <movie/>
+                  </models.Rating>
+                </ratings>
+              </models.User>
+            </entry>
+            <entry>
+              <long>2</long>
+              <models.User>
+                <id>2</id>
+                <firstName>bart</firstName>
+                <lastName>simpson</lastName>
+                <age>67</age>
+                <gender>M</gender>
+                <occupation>doctor</occupation>
+                <ratings>
+                  <models.Rating>
+                    <userId>2</userId>
+                    <movieId>4</movieId>
+                    <rating>4</rating>
+                    <movie/>
+                  </models.Rating>
+                  <models.Rating>
+                    <userId>2</userId>
+                    <movieId>0</movieId>
+                    <rating>2</rating>
+                    <movie/>
+                  </models.Rating>
+                </ratings>
+              </models.User>
+            </entry>
+            <entry>
+              <long>3</long>
+              <models.User>
+                <id>3</id>
+                <firstName>maggie</firstName>
+                <lastName>simpson</lastName>
+                <age>34</age>
+                <gender>F</gender>
+                <occupation>lecturer</occupation>
+                <ratings>
+                  <models.Rating>
+                    <userId>3</userId>
+                    <movieId>3</movieId>
+                    <rating>-1</rating>
+                    <movie/>
+                  </models.Rating>
+                </ratings>
+              </models.User>
+            </entry>
+            <entry>
+              <long>4</long>
+              <models.User>
+                <id>4</id>
+                <firstName>homer</firstName>
+                <lastName>simpson</lastName>
+                <age>44</age>
+                <gender>M</gender>
+                <occupation>lecturer</occupation>
+                <ratings>
+                  <models.Rating>
+                    <userId>4</userId>
+                    <movieId>2</movieId>
+                    <rating>-4</rating>
+                    <movie/>
+                  </models.Rating>
+                </ratings>
+              </models.User>
+            </entry>
+          </map>
+          <map>
+            <entry>
+              <string>marge simpson</string>
+              <models.User reference="../../../map/entry/models.User"/>
+            </entry>
+            <entry>
+              <string>homer simpson</string>
+              <models.User reference="../../../map/entry[5]/models.User"/>
+            </entry>
+            <entry>
+              <string>bart simpson</string>
+              <models.User reference="../../../map/entry[3]/models.User"/>
+            </entry>
+            <entry>
+              <string>lisa simpson</string>
+              <models.User reference="../../../map/entry[2]/models.User"/>
+            </entry>
+            <entry>
+              <string>maggie simpson</string>
+              <models.User reference="../../../map/entry[4]/models.User"/>
+            </entry>
+          </map>
+          <map>
+            <entry>
+              <long>0</long>
+              <models.Movie>
+                <id>0</id>
+                <title>The day after tomorrow</title>
+                <year>01-Jan-1994</year>
+                <url>www.dayaftertomorrow.com</url>
+                <ratings>
+                  <models.Rating reference="../../../../../map/entry/models.User/ratings/models.Rating"/>
+                  <models.Rating reference="../../../../../map/entry[3]/models.User/ratings/models.Rating[2]"/>
+                </ratings>
+              </models.Movie>
+            </entry>
+            <entry>
+              <long>1</long>
+              <models.Movie>
+                <id>1</id>
+                <title>Austin Powers</title>
+                <year>01-Jan-1994</year>
+                <url>www.austinpowers.com</url>
+                <ratings>
+                  <models.Rating reference="../../../../../map/entry[2]/models.User/ratings/models.Rating"/>
+                </ratings>
+              </models.Movie>
+            </entry>
+            <entry>
+              <long>2</long>
+              <models.Movie>
+                <id>2</id>
+                <title>Scary movie</title>
+                <year>01-Jan-1994</year>
+                <url>www.scarymovie.com</url>
+                <ratings>
+                  <models.Rating reference="../../../../../map/entry[5]/models.User/ratings/models.Rating"/>
+                </ratings>
+              </models.Movie>
+            </entry>
+            <entry>
+              <long>3</long>
+              <models.Movie>
+                <id>3</id>
+                <title>Kill Bill</title>
+                <year>01-Jan-1994</year>
+                <url>www.killbill.com</url>
+                <ratings>
+                  <models.Rating reference="../../../../../map/entry[4]/models.User/ratings/models.Rating"/>
+                </ratings>
+              </models.Movie>
+            </entry>
+            <entry>
+              <long>4</long>
+              <models.Movie>
+                <id>4</id>
+                <title>War of the worlds</title>
+                <year>01-Jan-1994</year>
+                <url>www.waroftheworlds.com</url>
+                <ratings>
+                  <models.Rating reference="../../../../../map/entry[3]/models.User/ratings/models.Rating"/>
+                </ratings>
+              </models.Movie>
+            </entry>
+          </map>
+          <map>
+            <entry>
+              <string>War of the worlds</string>
+              <models.Movie reference="../../../map[3]/entry[5]/models.Movie"/>
+            </entry>
+            <entry>
+              <string>The day after tomorrow</string>
+              <models.Movie reference="../../../map[3]/entry/models.Movie"/>
+            </entry>
+            <entry>
+              <string>Scary movie</string>
+              <models.Movie reference="../../../map[3]/entry[3]/models.Movie"/>
+            </entry>
+            <entry>
+              <string>Austin Powers</string>
+              <models.Movie reference="../../../map[3]/entry[2]/models.Movie"/>
+            </entry>
+            <entry>
+              <string>Kill Bill</string>
+              <models.Movie reference="../../../map[3]/entry[4]/models.Movie"/>
+            </entry>
+          </map>
+          <map>
+            <entry>
+              <string>0,0</string>
+              <models.Rating reference="../../../map/entry/models.User/ratings/models.Rating"/>
+            </entry>
+            <entry>
+              <string>1,1</string>
+              <models.Rating reference="../../../map/entry[2]/models.User/ratings/models.Rating"/>
+            </entry>
+            <entry>
+              <string>2,0</string>
+              <models.Rating reference="../../../map/entry[3]/models.User/ratings/models.Rating[2]"/>
+            </entry>
+            <entry>
+              <string>2,4</string>
+              <models.Rating reference="../../../map/entry[3]/models.User/ratings/models.Rating"/>
+            </entry>
+            <entry>
+              <string>3,3</string>
+              <models.Rating reference="../../../map/entry[4]/models.User/ratings/models.Rating"/>
+            </entry>
+            <entry>
+              <string>4,2</string>
+              <models.Rating reference="../../../map/entry[5]/models.User/ratings/models.Rating"/>
+            </entry>
+          </map>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+        </elementData>
+      </default>
+    </vector>
+  </java.util.Stack>
+</object-stream>
